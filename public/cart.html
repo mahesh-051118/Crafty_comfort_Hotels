@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - Food Waste Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        nav {
+            background-color: #4CAF50;
+            padding: 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .cart-section {
+            padding: 120px 20px 60px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .cart-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            transition: background 0.3s;
+        }
+
+        .cart-item:hover {
+            background: #f9f9f9;
+        }
+
+        .cart-item-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-title {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #4CAF50;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #666;
+            font-size: 1.2rem;
+            padding: 40px 0;
+        }
+
+        #purchase-button {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 30px auto 0;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        #purchase-button:hover {
+            background: #45a049;
+        }
+
+        #loading {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            display: none;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <nav>
+        <div class="logo">Food Waste Management</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="food-listings.html">Food Listings</a></li>
+            <li><a href="#" id="logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <section class="cart-section">
+        <div class="cart-container">
+            <div class="section-header">
+                <h1>Your Cart</h1>
+            </div>
+            <div id="loading">Loading...</div>
+            <div id="cart-items">
+                <!-- Cart items will be populated here -->
+            </div>
+            <button id="purchase-button" style="display: none;">Complete Purchase</button>
+        </div>
+    </section>
+
+    <script>
+        const username = localStorage.getItem('username');
+        if (!username) {
+            window.location.href = 'login.html';
+        }
+
+        function loadCart() {
+            document.getElementById('loading').style.display = 'block'; // Show loading spinner
+            fetch(`http://localhost:3000/cart/${username}`)
+                .then(response => response.json())
+                .then(items => {
+                    document.getElementById('loading').style.display = 'none'; // Hide loading spinner
+                    const cartItems = document.getElementById('cart-items');
+                    const purchaseButton = document.getElementById('purchase-button');
+
+                    if (items.length === 0) {
+                        cartItems.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
+                        purchaseButton.style.display = 'none';
+                    } else {
+                        cartItems.innerHTML = items.map(item => `
+                            <div class="cart-item">
+                                <img src="/Users/nagashrithjanamanchi/Desktop/Webdeve/adarsh page/adarsh/images/cb.jpg" alt="${item}" class="cart-item-image">
+                                <div class="cart-item-details">
+                                    <h3 class="cart-item-title">${item}</h3>
+                                    <p class="cart-item-price">₹${getItemPrice(item)}</p>
+                                </div>
+                            </div>
+                        `).join('');
+                        purchaseButton.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('loading').style.display = 'none'; // Hide loading spinner
+                    console.error('Error loading cart:', error);
+                    document.getElementById('cart-items').innerHTML = 
+                        '<p class="empty-cart">Error loading cart. Please try again.</p>';
+                });
+        }
+
+        function getItemPrice(item) {
+            const prices = {
+                'Vegetable Curry': 120,
+                'Chicken Biryani': 150,
+                'Paneer Butter Masala': 130
+            };
+            return prices[item] || 0;
+        }
+
+        document.getElementById('purchase-button').addEventListener('click', function() {
+            fetch(`http://localhost:3000/purchase/${username}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Purchase successful! Thank you for your order.');
+                    loadCart();
+                } else {
+                    alert('Error processing purchase. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error processing purchase:', error);
+                alert('Error processing purchase. Please try again.');
+            });
+        });
+
+        document.getElementById('logout').addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('username');
+                localStorage.removeItem('loggedIn');
+                window.location.href = 'login.html';
+            }
+        });
+
+        loadCart();
+    </script>
+</body>
+</html>

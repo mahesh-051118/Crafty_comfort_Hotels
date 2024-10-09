@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Listings - Food Waste Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        .header {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .nav-list {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-list a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-list a:hover {
+            color: #4CAF50;
+        }
+
+        .food-section {
+            padding: 120px 20px 60px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #4CAF50;
+            border-radius: 2px;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .food-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .food-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .food-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .food-content {
+            padding: 20px;
+        }
+
+        .food-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .food-price {
+            color: #4CAF50;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .food-description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #45a049;
+        }
+
+        #cart-count {
+            background: #ff6347;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .nav-list {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .section-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Food Waste Management</a>
+            <ul class="nav-list">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="food-listings.html">Food Listings</a></li>
+                <li><a href="cart.html">Cart <span id="cart-count">0</span></a></li>
+                <li><a href="#" id="logout">Logout</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="food-section">
+        <div class="container">
+            <div class="section-header">
+                <h1>Available Food Items</h1>
+            </div>
+            <div class="food-grid">
+                <div class="food-card">
+                    <img src="/Users/nagashrithjanamanchi/Desktop/Webdeve/adarsh page/adarsh/images/vb.jpg" alt="Vegetable Curry" class="food-image">
+                    <div class="food-content">
+                        <h2 class="food-title">Vegetable Curry</h2>
+                        <p class="food-price">₹120</p>
+                        <p class="food-description">A delicious mix of fresh vegetables in aromatic curry sauce.</p>
+                        <button class="add-to-cart-btn" onclick="addToCart('Vegetable Curry', 120)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <img src="/Users/nagashrithjanamanchi/Desktop/Webdeve/adarsh page/adarsh/images/cb.jpg" alt="Chicken Biryani" class="food-image">
+                    <div class="food-content">
+                        <h2 class="food-title">Chicken Biryani</h2>
+                        <p class="food-price">₹150</p>
+                        <p class="food-description">Fragrant basmati rice cooked with tender chicken and aromatic spices.</p>
+                        <button class="add-to-cart-btn" onclick="addToCart('Chicken Biryani', 150)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <img src="/Users/nagashrithjanamanchi/Desktop/Webdeve/adarsh page/adarsh/images/pb.jpg" alt="Paneer Butter Masala" class="food-image">
+                    <div class="food-content">
+                        <h2 class="food-title">Paneer Butter Masala</h2>
+                        <p class="food-price">₹130</p>
+                        <p class="food-description">Cottage cheese cubes in rich, creamy tomato gravy.</p>
+                        <button class="add-to-cart-btn" onclick="addToCart('Paneer Butter Masala', 130)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+    let cartItems = [];
+
+    async function addToCart(item, price) {
+        const username = localStorage.getItem('username');
+        if (!username) {
+            alert('Please log in to add items to cart');
+            window.location.href = 'login.html';
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:3000/cart/${username}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ item: item })
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                cartItems = data.cart;
+                updateCartCount();
+                alert(`${item} has been added to your cart!`);
+            } else {
+                alert('Failed to add item to cart. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            alert('Error adding item to cart. Please try again.');
+        }
+    }
+
+    function updateCartCount() {
+        const cartCountElement = document.getElementById('cart-count');
+        if (cartCountElement) {
+            cartCountElement.textContent = cartItems.length;
+        }
+    }
+
+    async function loadCart() {
+        const username = localStorage.getItem('username');
+        if (username) {
+            try {
+                const response = await fetch(`http://localhost:3000/cart/${username}`);
+                const data = await response.json();
+                cartItems = data;
+                updateCartCount();
+            } catch (error) {
+                console.error('Error loading cart:', error);
+            }
+        }
+    }
+
+    document.getElementById('logout').addEventListener('click', function() {
+        localStorage.removeItem('username');
+        localStorage.removeItem('loggedIn');
+        window.location.href = 'login.html';
+    });
+
+    document.addEventListener('DOMContentLoaded', loadCart);
+    </script>
+</body>
+</html>
